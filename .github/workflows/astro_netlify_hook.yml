@@ -25,4 +25,4 @@ jobs:
       run: npm run build
 # An optional build hook 
     - name: Trigger Netlify deploy
-      run: curl -X POST -d '{}' https://api.netlify.com/build_hooks/6870422666c4a1bc3932b8a6
+      run: curl -X POST -d '{}' https://api.netlify.com/build_hooks/687049ac33783cc4f91bfea2
