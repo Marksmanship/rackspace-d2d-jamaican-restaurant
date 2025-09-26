@@ -9,6 +9,15 @@ const data = await res.json();
 const profile = data.data[0]?.attributes;
 
 const qr = await QRCode.toDataURL(`https:///api.austinandryan.io/p/${slug}`);
+
+export async function getStaticPaths() {
+  const res = await fetch('https://your-strapi-api.com/api/wendal-users?populate=profile_picture');
+  const data = await res.json();
+
+  return data.data.map((user) => ({
+    params: { slug: user.attributes.slug },
+  }));
+}
 ---
 <html lang="en">
     <head>
