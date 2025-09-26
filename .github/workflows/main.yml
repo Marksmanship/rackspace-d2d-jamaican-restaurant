@@ -17,10 +17,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '22.17.0' # formally 18
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci # or install because install is more common but ci is faster for CI/CD and installs from package-lock.json whereas install installs from package.json which can lead to different versions being installed because package.json allows for version ranges
 
     - name: Build Astro project
       run: npm run build
