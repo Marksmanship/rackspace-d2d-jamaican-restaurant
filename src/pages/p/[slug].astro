@@ -1,0 +1,38 @@
+---
+// Astro server-side code
+import { fetch } from 'undici';
+import QRCode from 'qrcode';
+
+const { slug } = Astro.params;
+const res = await fetch(`https://api.austinandryan.io/api/wendal-users?filters[slug][$eq]=${slug}&populate=profile_picture`);
+const data = await res.json();
+const profile = data.data[0]?.attributes;
+
+const qr = await QRCode.toDataURL(`https:///api.austinandryan.io/p/${slug}`);
+---
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{profile ? profile.name : 'User Not Found'}</title>
+    </head>
+    <body>
+        {profile ? (
+            <main>
+                <h1>{profile.name}</h1>
+                {profile.profile_picture && profile.profile_picture.data && (
+                    <img
+                        src={profile.profile_picture.data.attributes.url}
+                        alt={profile.name}
+                        width="200"
+                    />
+                )}
+                <p>{profile.bio}</p>
+                <img src={qr} alt="QR code for profile" />
+            </main>
+        ) : (
+            <p>User not found.</p>
+        )}
+    </body>
