@@ -1,0 +1,29 @@
+
+name: Astro Site Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Astro project
+      run: npm run build
+# An optional build hook 
+    - name: Trigger Netlify deploy
+      run: curl -X POST -d '{}' https://api.netlify.com/build_hooks/687049ac33783cc4f91bfea2
