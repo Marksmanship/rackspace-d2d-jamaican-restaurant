@@ -12,6 +12,8 @@ export async function getStaticPaths() {
   if (!data.results || data.results.length === 0) {
     throw new Error('No users found');
   }
+  console.log(data);
+  
   return data.results.map((user) => ({
     params: { slug: user.attributes.slug },
   }));
