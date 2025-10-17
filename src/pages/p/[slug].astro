@@ -35,6 +35,8 @@ if (!data.data || data.data.length === 0) {   // the second "data" attribute is 
 }
 
 const profile = data.data[0]; // since we are filtering by slug, we expect only one result
+console.log(JSON.stringify(profile.profile_picture, null, 2));
+const imageUrl = profile.profile_picture?.data?.attributes?.url;
 const profile_full_name = profile.first_name + ' ' + profile.last_name;
 ---
 <html lang="en">
@@ -46,11 +48,17 @@ const profile_full_name = profile.first_name + ' ' + profile.last_name;
   <body class="bg-gray-100 text-gray-800">
     <main class="max-w-sm mx-auto mt-8 p-4 bg-white rounded-lg shadow">
       <div class="flex flex-col items-center">
-        <img
-          src={profile.profile_picture?.data?.attributes?.url}
-          alt={profile_full_name}
-          class="w-28 h-28 rounded-full object-cover mb-3 shadow-sm"
-        />
+        {
+            profile.profile_picture?.url && (
+                <img
+                    src={`https://api.austinandryan.io${profile.profile_picture.url}`}
+                    alt={`${profile.first_name}'s profile picture`}
+                    class="w-28 h-28 rounded-full object-cover"
+                />
+            )
+        }
+
+
         <h1 class="text-xl font-semibold">{profile_full_name}</h1>
         <p class="text-sm text-gray-500">{profile.location}</p>
       </div>
