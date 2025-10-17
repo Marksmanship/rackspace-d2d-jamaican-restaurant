@@ -2,6 +2,12 @@
 name: Astro Site Deploy
 
 on:
+  workflow_dispatch:
+    inputs:
+      branch_to_run_on:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'master' # Or your default branch
   push:
     branches:
       - master
