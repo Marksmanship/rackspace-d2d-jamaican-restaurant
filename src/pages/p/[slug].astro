@@ -2,24 +2,27 @@
 import { fetch } from 'undici';
 import QRCode from 'qrcode';
 
+
 export async function getStaticPaths() {
-  const res = await fetch('https://api.austinandryan.io/api/wendal-users?populate=profile_picture');
+  const res = await fetch('https://api.austinandryan.io/api/wendal-users?populate=profile_picture'); // https://developer.mozilla.org/en-US/docs/Web/API/Response/json_static
   if (!res.ok) {
     throw new Error(`Failed to fetch profiles: ${res.status} ${res.statusText}`);
   }
 
   const data = await res.json();
-  if (!data.results || data.results.length === 0) {
+  if (!data.data || data.data.length === 0) {   // the second "data" attribute is from our own API response structure. by default, strapi nests the actual data inside a "data" attribute even though the astro docs use "results"
     throw new Error('No users found');
   }
   console.log(data);
-  
-  return data.results.map((user) => ({
-    params: { slug: user.attributes.slug },
+
+  return data.data.map((user) => ({
+    params: { slug: user.slug },
   }));
 }
 
+/* Outside of the getStaticPaths function */
 const { slug } = Astro.params;
+const qr = await QRCode.toDataURL(`https://austinandryan.io/p/${slug}`);
 
 const res = await fetch(`https://api.austinandryan.io/api/wendal-users?filters[slug][$eq]=${slug}&populate=profile_picture`);
 if (!res.ok) {
@@ -27,13 +30,11 @@ if (!res.ok) {
 }
 
 const data = await res.json();
-const profile = data.data[0]?.attributes;
-
-if (!profile) {
-  throw new Error(`Profile not found for slug: ${slug}`);
+if (!data.data || data.data.length === 0) {   // the second "data" attribute is from our own API response structure. by default, strapi nests the actual data inside a "data" attribute even though the astro docs use "results"
+    throw new Error('No users found');
 }
 
-const qr = await QRCode.toDataURL(`https://austinandryan.io/p/${slug}`);
+const profile = data.data[0]; // since we are filtering by slug, we expect only one result
 ---
 <html lang="en">
   <head>
