@@ -35,22 +35,23 @@ if (!data.data || data.data.length === 0) {   // the second "data" attribute is 
 }
 
 const profile = data.data[0]; // since we are filtering by slug, we expect only one result
+const profile_full_name = profile.first_name + ' ' + profile.last_name;
 ---
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{profile.full_name} | Austin & Ryan</title>
+    <title>{profile_full_name} | Austin & Ryan</title>
   </head>
   <body class="bg-gray-100 text-gray-800">
     <main class="max-w-sm mx-auto mt-8 p-4 bg-white rounded-lg shadow">
       <div class="flex flex-col items-center">
         <img
           src={profile.profile_picture?.data?.attributes?.url}
-          alt={profile.full_name}
+          alt={profile_full_name}
           class="w-28 h-28 rounded-full object-cover mb-3 shadow-sm"
         />
-        <h1 class="text-xl font-semibold">{profile.full_name}</h1>
+        <h1 class="text-xl font-semibold">{profile_full_name}</h1>
         <p class="text-sm text-gray-500">{profile.location}</p>
       </div>
 
@@ -70,7 +71,7 @@ const profile = data.data[0]; // since we are filtering by slug, we expect only 
           href={`/donate/${slug}`}
           class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
-          Support {profile.full_name.split(' ')[0]}
+          Support {profile_full_name.split(' ')[0]}
         </a>
       </div>
 
